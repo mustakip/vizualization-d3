@@ -1,18 +1,24 @@
 const formats = {
-    Rs: d => `${d} ₹`,
-    kCrRs: d => `${d / 1000}k Cr ₹`,
-    Percent: d => `${d}%`
+  Rs: d => `${d} ₹`,
+  kCrRs: d => `${d / 1000}k Cr ₹`,
+  Percent: d => `${d}%`
 };
 const chartSize = { width: 800, height: 600 };
 const margin = {
-    left: 100,
-    right: 10,
-    top: 10,
-    bottom: 150
-}
+  left: 100,
+  right: 10,
+  top: 10,
+  bottom: 150
+};
 const width = chartSize.width - margin.left - margin.right;
 const height = chartSize.height - margin.top - margin.bottom;
-const configs = [['CMP', formats.Rs], ['MarketCap', formats.kCrRs], ['PE'], ['DivYld', formats.Percent], ['ROCE', formats.Percent]];
+const configs = [
+  ["CMP", formats.Rs],
+  ["MarketCap", formats.kCrRs],
+  ["PE"],
+  ["DivYld", formats.Percent],
+  ["ROCE", formats.Percent]
+];
 
 const drawCompanies = function(companies) {
   const toLine = b => `<strong>${b.Name}</strong> <i>${b.CMP}</i>`;
@@ -89,26 +95,43 @@ const drawCompanies = function(companies) {
 };
 
 const updateChart = (companies, step = 0) => {
-    const [fieldName, format] = configs[step % configs.length];
-    const svg = d3.select('#chart-area svg');
-    const y = d3.scaleLinear()
-        .domain([0, _.maxBy(companies, fieldName)[fieldName]])
-        .range([height, 0]);
-    svg.select('.y.axis-label').text(fieldName);
-    const yAxis = d3.axisLeft(y)
-        .ticks(10)
-        .tickFormat(format);
-    svg.select('.y.axis').call(yAxis);
-    svg.selectAll('g rect').data(companies)
-        .transition().duration(2000).ease(d3.easeLinear)
-        .attr('height', b => y(0) - y(b[fieldName]))
-        .attr('y', b => y(b[fieldName]))
-}
-const startVisualization = (companies) => {
-    let step = 1;
-    drawCompanies(companies);
-    setInterval(() => updateChart(companies, step++), 3000);
-}
+  const [fieldName, format] = configs[step % configs.length];
+  const svg = d3.select("#chart-area svg");
+  const y = d3
+    .scaleLinear()
+    .domain([0, _.maxBy(companies, fieldName)[fieldName]])
+    .range([height, 0]);
+  svg.select(".y.axis-label").text(fieldName);
+  const yAxis = d3
+    .axisLeft(y)
+    .ticks(10)
+    .tickFormat(format);
+  svg.select(".y.axis").call(yAxis);
+
+  svg
+    .selectAll("g rect")
+    .data(companies)
+    .transition()
+    .duration(2000)
+    .ease(d3.easeLinear)
+    .attr("height", b => y(0) - y(b[fieldName]))
+    .attr("y", b => y(b[fieldName]));
+
+  svg
+    .selectAll("g rect")
+    .data(companies, c => c.Name)
+    .exit()
+    .remove()
+    .transition()
+    .duration(2000)
+    .ease(d3.easeLinear);
+};
+const startVisualization = companies => {
+  let step = 1;
+  drawCompanies(companies);
+  setInterval(() => updateChart(companies, step++), 3000);
+//   setInterval(() => companies.shift(), 5000);            
+};
 
 const main = function() {
   d3.csv("data/companies.csv", function({ Name, ...numerics }) {
@@ -116,8 +139,6 @@ const main = function() {
     return { Name, ...numerics };
   }).then(startVisualization);
 };
-
-
 
 window.onload = main;
 
