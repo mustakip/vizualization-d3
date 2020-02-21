@@ -1,0 +1,84 @@
+html,
+body {
+  /* height: 100%;
+  width: 100%; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* background: black; */
+  /* color: white; */
+}
+svg {
+  box-sizing: border-box;
+  box-shadow: 0px 0px 18px -5px rgba(150, 138, 171, 0.61);
+}
+.axis-label {
+  font-size: 20px;
+  text-anchor: middle;
+  /* fill: white; */
+}
+.y.axis-label {
+  transform: rotate(-90deg);
+}
+.x.axis text {
+  font-weight: bold;
+  text-anchor: end;
+  transform: rotate(-40deg);
+}
+.row {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  margin-bottom: 50px;
+}
+.close {
+  fill: none;
+  stroke: black;
+  stroke-width: 1.5px;
+}
+.average {
+  fill: none;
+  stroke: blueviolet;
+  stroke-width: 1px;
+}
+.container {
+  text-align: center;
+  /* height: inherit; */
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+#slider-container {
+  margin: 20px 0 0 0;
+  height: 20px;
+  width: 1000px;
+}
+#range-label {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+
+}
+
+table {
+  border: 1px solid black;
+  width: 600px;
+  /* height: 1000px; */
+}
+
+.transaction-heading {
+  margin: 10px 0 ;
+}
+
+td {
+  text-align: center;
+}
+
+th {
+  color: white;
+  background: #333;
+}
